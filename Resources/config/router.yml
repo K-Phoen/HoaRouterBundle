@@ -1,0 +1,48 @@
+services:
+    hoa.router.http:
+        class:  Hoa\Router\Http\Http
+        public: false
+
+    hoa.router:
+        class:  Hoa\RouterBundle\Routing\Router
+        public: false
+        arguments:
+            - @hoa.router.http
+            - @hoa.routing.loader
+            - %router.resource%
+            - @logger
+
+    router:
+        alias: hoa.router
+
+    # loaders
+    hoa.routing.loader.yml:
+        class:      Symfony\Component\Routing\Loader\YamlFileLoader
+        arguments:  [ @file_locator ]
+        public:     false
+        tags:
+            - { name: hoa.routing.loader }
+
+    hoa.routing.loader.xml:
+        class:      Symfony\Component\Routing\Loader\XmlFileLoader
+        arguments:  [ @file_locator ]
+        public:     false
+        tags:
+            - { name: hoa.routing.loader }
+
+    hoa.routing.loader.php:
+        class:      Symfony\Component\Routing\Loader\PhpFileLoader
+        arguments:  [ @file_locator ]
+        public:     false
+        tags:
+            - { name: hoa.routing.loader }
+
+    # loading
+    hoa.routing.resolver:
+        class:  Symfony\Component\Config\Loader\LoaderResolver
+        public: false
+
+    hoa.routing.loader:
+        class:     Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader
+        arguments: [ @controller_name_converter, @logger, @hoa.routing.resolver ]
+        public:    false
