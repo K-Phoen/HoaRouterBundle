@@ -57,7 +57,7 @@ class Router implements RouterInterface
         $this->loadRoutes();
 
         try {
-            $this->httpRouter->route($pathinfo); // the returned data isn't right
+            $this->httpRouter->route($pathinfo);
         } catch (HoaException\NotFound $e) {
             throw new SymfonyException\ResourceNotFoundException($e->getMessage(), $e->getCode(), $e);
         }
